@@ -1,0 +1,1 @@
+tar -czvf beautize.tgz --exclude='build*' --exclude='*.tgz' *

@@ -1,0 +1,13 @@
+%chk=water_dimer.chk
+#p hf/3-21g
+
+Water dimer fragments
+
+0 1  0 1  0 1
+O(Fragment=1)   0.000000   0.000000   0.000000
+H(Fragment=1)   0.758602   0.000000   0.504284
+H(Fragment=1)  -0.758602   0.000000   0.504284
+O(Fragment=2)   0.000000   0.000000   2.900000
+H(Fragment=2)   0.758602   0.000000   3.404284
+H(Fragment=2)  -0.758602   0.000000   3.404284
+
