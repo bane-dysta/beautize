@@ -13,6 +13,8 @@ using namespace beautize;
 namespace fs=std::filesystem;
 namespace {
 const char* help=R"(beautize 0.1.0 - constrained GFN-FF cleanup of Gaussian Cartesian inputs
+author: Bane Dysta
+feedback: https://github.com/bane-dysta/beautize
 
 Usage: beautize input.gjf [options]
 
