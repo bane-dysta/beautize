@@ -2,7 +2,7 @@
 
 **用 GaussView 已有的键连约束 GFN-FF，在不破坏参考核心的前提下清理建模后的原子碰撞。**
 
-做过渡态复现、同系物建模或取代基扫描时，通常来说，起始点是从文献/先前计算拿到的一个已经有意义的参考结构。我们通常希望保留反应核心，只替换外围基团；但在 GaussView 等建模工具里完成替换后，新原子很容易直接撞进原结构，甚至出现大面积堆叠。
+做过渡态复现、同系物建模或取代基扫描时，通常来说，起始点是从文献/先前计算拿到的一个已经有意义的参考结构。我们通常希望保留反应核心，只替换外围基团；但在 GaussView 等建模工具里完成取代基替换后，新基团上的原子很容易直接撞进原结构，甚至出现大面积堆叠。
 
 这些碰撞必须在 DFT 优化之前处理掉。问题在于，这一步需要的并不是把整个分子优化到一个力场极小值，而是**只把建模产生的坏接触整理开，同时保住参考结构中真正有价值的几何信息。**
 
@@ -12,17 +12,17 @@ GaussView 的 Clean（扫把工具）适合快速整理普通结构，但参考�
 
 xTB 在正常初始结构上很好用，但外围原子高度重叠 + 冻结是一个很不友好的初始条件。此时它并不会把 GaussView 里的 connectivity 当成固定拓扑；为了逃离极端排斥，几何可能发生远超预期的重排。在 `examples/` 的模型里，就可以看到冻结核心后得到明显不合理的稠环样、分解的结构。
 
-`beautize` 就是做这件事的。它是 DFT 之前的一步 constrained cleanup。`beautize`读取 Gaussian/GaussView GJF 中保存的 Cartesian 坐标、connectivity 和键级，把现有键连直接交给 GFN-FF，再在冻结原子或 B/A/D 内坐标约束下做优化，把明显不合理的堆叠清掉，然后把坐标写回 GJF。
+`beautize` 就是做这件事的。它是 DFT 之前的一步 constrained cleanup。`beautize`读取 Gaussian/GaussView GJF 中保存的 Cartesian 坐标、connectivity 和键级，把现有键连直接交给内置的 GFN-FF 力场，再在冻结原子或 B/A/D 内坐标约束下做优化，把明显不合理的堆叠清掉，然后把坐标写回 GJF。
 
 ## 示例
 
-`examples/crash.gjf` 是一个替换基团后发生严重碰撞的模型。我们用同一组冻结原子比较原始结构、xTB 处理结果和 beautize 结果。
+`examples/crash.gjf` 是一个替换取代基后发生严重碰撞的模型。我们用同一组冻结原子比较原始结构、xTB 处理结果和 beautize 结果。
 
-| 原始模型 | xTB | beautize |
-| --- | --- | --- |
-| ![Steric crash](docs/images/crash.png) | ![xTB result](docs/images/xtb.png) | ![beautize result](docs/images/beautize.png) |
+| 文献中的TS | 替换取代基后 | GFN2-xTB直接优化 | beautize消除碰撞 |
+| --- | --- | --- | --- |
+| ![REFERENCE](docs/images/origin.gif) | ![Steric crash](docs/images/crash.gif) | ![xTB result](docs/images/xtb.gif) | ![beautize result](docs/images/beautize.gif) |
 
-xtb和beautize都冻结了19,20,25,28,29原子。可以看到xtb优化后体系已经分解，失去了参考意义，而beautize仍然很好地保留了核心区，同时将外部不合理接触优化掉了，可以直接用于后续DFT计算
+xTB和beautize优化时都冻结了19,20,25,28,29原子。可以看到xTB优化出了一个奇异稠环，使得整个体系都失去了参考意义，而beautize仍然很好地保留了核心区，同时将外部不合理接触优化掉了，可以直接用于后续DFT计算。
 
 ## 核心设计
 

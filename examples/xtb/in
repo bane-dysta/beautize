@@ -1,3 +1,5 @@
 $fix
    atoms: 19,20,25,28,29
+$opt
+   engine=inertial
 $end
